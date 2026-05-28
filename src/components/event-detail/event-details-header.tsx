@@ -76,7 +76,7 @@ export function EventDetailsHeader({
                 type="button"
                 disabled={actionsDisabled}
                 className={cn(
-                  "text-sm font-medium text-[var(--color-10)]",
+                  "text-xs font-medium text-[var(--color-10)]",
                   actionsDisabled && "cursor-not-allowed opacity-40",
                 )}
               >
