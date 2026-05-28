@@ -110,9 +110,11 @@ export function EventSidebar({
             onCancelInCycleChange={onCancelInCycleChange}
           />
         )}
-        {isExpanded && (
-          <EventStatusBadge badge={statusBadge} onClick={onStatusCycle} />
-        )}
+        <EventStatusBadge
+          badge={statusBadge}
+          onClick={onStatusCycle}
+          isExpanded={isExpanded}
+        />
       </div>
     </aside>
   )
