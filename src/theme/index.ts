@@ -17,7 +17,7 @@ import {
 } from "./recipes/action-buttons"
 
 const config = defineConfig({
-  preflight: false,
+  preflight: true,
   theme: {
     tokens: {
       colors: colorTokens,

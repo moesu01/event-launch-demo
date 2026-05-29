@@ -1,7 +1,6 @@
 import { Box } from "@chakra-ui/react"
 import { useLayoutEffect, useRef } from "react"
 import {
-  contentPanelInnerShadowOverlayClass,
   contentPanelInnerShadowPulseClass,
   contentPanelInnerShadowTransitionClass,
   getContentPanelInnerShadowValue,
@@ -136,12 +135,21 @@ export function ContentPanelInnerShadowOverlay({
   }, [])
 
   const overlayClassName = [
-    contentPanelInnerShadowOverlayClass,
     launchPhase === "idle" && contentPanelInnerShadowTransitionClass,
     launchPhase === "loading" && contentPanelInnerShadowPulseClass,
   ]
     .filter(Boolean)
     .join(" ")
 
-  return <Box ref={overlayRef} aria-hidden className={overlayClassName} />
+  return (
+    <Box
+      ref={overlayRef}
+      aria-hidden
+      className={overlayClassName}
+      pointerEvents="none"
+      position="absolute"
+      inset="0"
+      zIndex="1"
+    />
+  )
 }

@@ -1,6 +1,3 @@
-export const contentPanelInnerShadowOverlayClass =
-  "pointer-events-none absolute inset-0 z-[1]"
-
 export const contentPanelInnerShadowTransitionClass =
   "content-panel-inner-shadow-transition"
 

@@ -1,9 +1,12 @@
 import { Box, Flex, Text, chakra } from "@chakra-ui/react"
 import { useLayoutEffect, useState } from "react"
 import { ExternalLink, Hourglass, Loader2, Rocket } from "lucide-react"
-import { cn } from "../../lib/cn"
 import type { EventStatus } from "../../types/event"
 import type { LaunchPhase, LaunchPostStatus } from "../../types/launch"
+
+function cx(...classes: Array<string | false | undefined>) {
+  return classes.filter(Boolean).join(" ")
+}
 
 interface LaunchEventBarProps {
   status: EventStatus
@@ -97,7 +100,7 @@ export function LaunchEventBar({
 
   return (
     <Flex
-      className={cn(
+      className={cx(
         "launch-footer-fade",
         isExitingLive && "launch-footer-fade--exit",
       )}
@@ -122,7 +125,7 @@ export function LaunchEventBar({
       <Flex position="relative" w="full" justify="center">
         {showLiveToast && (
           <Flex
-            className={cn(
+            className={cx(
               "launch-success-toast",
               isExitingLive && "launch-success-toast--exit",
             )}
@@ -150,21 +153,39 @@ export function LaunchEventBar({
             >
               {LIVE_TOAST_MESSAGE}
             </Text>
-            <button
+            <chakra.button
               type="button"
               onClick={onGoToEventPage}
-              className={cn(
-                "flex h-[38px] shrink-0 items-center justify-center gap-1 rounded-[var(--radius-md)] border border-[var(--color-3)] bg-[var(--color-1)] px-3 text-sm font-semibold text-[var(--color-14)] shadow-[var(--shadow-sm)]",
-                "launch-success-toast__action cursor-pointer pl-3 pr-2.5 active:scale-[0.96] motion-safe:transition-transform motion-safe:duration-150 motion-safe:ease-out",
-              )}
+              className="launch-success-toast__action"
+              display="flex"
+              h="headerActionH"
+              flexShrink={0}
+              alignItems="center"
+              justifyContent="center"
+              gap="1"
+              borderRadius="md"
+              borderWidth="1px"
+              borderColor="color.3"
+              bg="color.1"
+              pl="3"
+              pr="2.5"
+              fontSize="sm"
+              fontWeight="semibold"
+              color="color.14"
+              boxShadow="sm"
+              cursor="pointer"
+              transition="transform 150ms ease-out"
+              _active={{ transform: "scale(0.96)" }}
               aria-label="Go to Event"
             >
-              <span>Go to Event</span>
+              <chakra.span>Go to Event</chakra.span>
               <ExternalLink
-                className="launch-success-toast__action-icon h-3.5 w-3.5 shrink-0"
+                className="launch-success-toast__action-icon"
+                size={14}
+                style={{ flexShrink: 0 }}
                 aria-hidden
               />
-            </button>
+            </chakra.button>
           </Flex>
         )}
         {showFooterButton && displayVariant && (
@@ -183,7 +204,7 @@ export function LaunchEventBar({
             }
             // Semantic animation classes own the spring (width, border-radius,
             // padding, gap) — do NOT set those via Chakra props or the spring breaks.
-            className={cn(
+            className={cx(
               "launch-footer-button",
               isPillShape
                 ? "launch-footer-button--loading"
@@ -240,7 +261,7 @@ export function LaunchEventBar({
 
             <Box position="relative" zIndex="10" h="full" w="full">
               <Flex
-                className={cn(
+                className={cx(
                   "launch-footer-button__label",
                   displayVariant === "launch"
                     ? "launch-footer-button__label--visible"
@@ -265,7 +286,7 @@ export function LaunchEventBar({
               </Flex>
 
               <Flex
-                className={cn(
+                className={cx(
                   "launch-footer-button__label",
                   displayVariant === "loading"
                     ? "launch-footer-button__label--visible"
@@ -277,15 +298,18 @@ export function LaunchEventBar({
                 justify="center"
               >
                 <Loader2
-                  className="animate-spin"
                   size={24}
-                  style={{ flexShrink: 0, color: "white" }}
+                  style={{
+                    flexShrink: 0,
+                    color: "white",
+                    animation: "spin 1s linear infinite",
+                  }}
                   aria-hidden
                 />
               </Flex>
 
               <Flex
-                className={cn(
+                className={cx(
                   "launch-footer-button__label",
                   displayVariant === "pending"
                     ? "launch-footer-button__label--visible"
