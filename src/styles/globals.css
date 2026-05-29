@@ -79,6 +79,11 @@
     rgba(255, 255, 255, 0) 100%
   );
   --launch-success-toast-bg: rgba(56, 161, 105, 1);
+  --launch-success-toast-shadow:
+    0px 8px 24px -4px rgba(0, 0, 0, 0.18),
+    0px 4px 8px -2px rgba(0, 0, 0, 0.1);
+  --launch-toast-enter-duration: 420ms;
+  --launch-toast-enter-ease: cubic-bezier(0.32, 0.72, 0, 1);
 
   /* DialKit-tuned spring approx (visualDuration 0.15, bounce 0.25) */
   --launch-spring-duration: 250ms;
@@ -86,6 +91,13 @@
   --launch-inner-shadow-spring-duration: 550ms;
   --launch-footer-spring-duration: var(--launch-spring-duration);
   --launch-footer-spring-ease: var(--launch-spring-ease);
+  --launch-footer-enter-duration: 420ms;
+  --launch-footer-enter-ease: cubic-bezier(0.32, 0.72, 0, 1);
+
+  --sidebar-duration: 200ms;
+  --sidebar-ease: cubic-bezier(0.32, 0.72, 0, 1);
+  --sidebar-icon-ease: cubic-bezier(0.2, 0, 0, 1);
+  --sidebar-icon-duration: 200ms;
 
   /* --launch-scan-blue: rgba(193, 223, 253, 0.65); */
 
@@ -237,22 +249,67 @@ body {
 @keyframes launchFooterButtonEnter {
   from {
     opacity: 0;
-    transform: translateY(12px) scale(0.94);
+    transform: translateY(100%);
   }
 
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
   }
 }
 
 .launch-footer-button--enter {
-  animation: launchFooterButtonEnter var(--launch-footer-spring-duration)
-    var(--launch-footer-spring-ease) both;
+  animation: launchFooterButtonEnter var(--launch-footer-enter-duration)
+    var(--launch-footer-enter-ease) both;
 }
 
-.launch-footer-button__layer,
+@keyframes launchFooterLabelPieceEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+    filter: blur(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+.launch-footer-button--enter .launch-footer-button__launch-text {
+  opacity: 0;
+  animation: launchFooterLabelPieceEnter 300ms cubic-bezier(0.2, 0, 0, 1) 100ms
+    both;
+}
+
+.launch-footer-button--enter .launch-footer-button__launch-icon {
+  opacity: 0;
+  animation: launchFooterLabelPieceEnter 300ms cubic-bezier(0.2, 0, 0, 1) 170ms
+    both;
+}
+
 .launch-footer-button__label {
+  transition:
+    opacity var(--launch-footer-spring-duration) var(--launch-footer-spring-ease),
+    transform var(--launch-footer-spring-duration) var(--launch-footer-spring-ease),
+    filter var(--launch-footer-spring-duration) var(--launch-footer-spring-ease);
+}
+
+.launch-footer-button__label--hidden {
+  opacity: 0;
+  transform: scale(0.25);
+  filter: blur(4px);
+  pointer-events: none;
+}
+
+.launch-footer-button__label--visible {
+  opacity: 1;
+  transform: scale(1);
+  filter: blur(0);
+}
+
+.launch-footer-button__layer {
   transition: opacity var(--launch-footer-spring-duration)
     var(--launch-footer-spring-ease);
 }
@@ -262,6 +319,72 @@ body {
     var(--launch-spring-ease);
 }
 
+.sidebar-transition {
+  transition:
+    width var(--sidebar-duration) var(--sidebar-ease),
+    padding var(--sidebar-duration) var(--sidebar-ease);
+}
+
+.sidebar-icon-layer {
+  transition:
+    opacity var(--sidebar-icon-duration) var(--sidebar-icon-ease),
+    transform var(--sidebar-icon-duration) var(--sidebar-icon-ease),
+    filter var(--sidebar-icon-duration) var(--sidebar-icon-ease);
+}
+
+.sidebar-nav-item {
+  transition:
+    background-color 150ms ease-out,
+    opacity 150ms ease-out,
+    padding-left var(--sidebar-duration) var(--sidebar-ease),
+    padding-right var(--sidebar-duration) var(--sidebar-ease),
+    gap var(--sidebar-duration) var(--sidebar-ease);
+}
+
+.sidebar-icon-slot {
+  width: 1.5rem;
+  flex-shrink: 0;
+}
+
+.sidebar-label-transition {
+  transition:
+    opacity var(--sidebar-duration) var(--sidebar-ease),
+    transform var(--sidebar-duration) var(--sidebar-ease);
+}
+
+.sidebar-status-badge {
+  transition:
+    width var(--sidebar-duration) var(--sidebar-ease),
+    padding var(--sidebar-duration) var(--sidebar-ease),
+    gap var(--sidebar-duration) var(--sidebar-ease),
+    border-color var(--sidebar-duration) var(--sidebar-ease),
+    background-color var(--sidebar-duration) var(--sidebar-ease),
+    box-shadow var(--sidebar-duration) var(--sidebar-ease),
+    border-radius var(--sidebar-duration) var(--sidebar-ease),
+    opacity 200ms ease-out;
+}
+
+.sidebar-status-dot-row {
+  transition:
+    gap var(--sidebar-duration) var(--sidebar-ease),
+    padding-left var(--sidebar-duration) var(--sidebar-ease);
+}
+
+.sidebar-reveal-grid {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--sidebar-duration) var(--sidebar-ease);
+}
+
+.sidebar-reveal-grid--open {
+  grid-template-rows: 1fr;
+}
+
+.sidebar-reveal-grid__inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
 @media (prefers-reduced-motion: reduce) {
   :root {
     --launch-spring-duration: 0ms;
@@ -269,6 +392,8 @@ body {
     --launch-inner-shadow-spring-duration: 0ms;
     --launch-footer-spring-duration: 0ms;
     --launch-footer-spring-ease: linear;
+    --sidebar-duration: 0ms;
+    --sidebar-icon-duration: 0ms;
   }
 
   .launch-footer-button--exit {
@@ -277,6 +402,28 @@ body {
 
   .launch-footer-button--enter {
     animation: none;
+    transform: none;
+  }
+
+  .launch-footer-button--enter .launch-footer-button__launch-text,
+  .launch-footer-button--enter .launch-footer-button__launch-icon {
+    animation: none;
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+
+  .launch-success-toast {
+    animation: none;
+    transform: none;
+  }
+
+  .launch-success-toast__message,
+  .launch-success-toast__action {
+    animation: none;
+    opacity: 1;
+    filter: none;
+    transform: none;
   }
 }
 
@@ -289,14 +436,57 @@ body {
 }
 
 .launch-success-toast {
+  box-shadow: var(--launch-success-toast-shadow);
+  animation: launchSuccessToastEnter var(--launch-toast-enter-duration)
+    var(--launch-toast-enter-ease) both;
   transition:
     opacity 500ms ease-out,
     transform 500ms ease-out;
 }
 
 .launch-success-toast--exit {
+  animation: none;
   opacity: 0;
-  transform: translateY(8px);
+  transform: translateY(100%);
+}
+
+@keyframes launchSuccessToastEnter {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes launchToastContentFade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.launch-success-toast__message {
+  margin: 0;
+  animation: launchToastContentFade 280ms ease-out 120ms both;
+}
+
+.launch-success-toast__action {
+  opacity: 0;
+  animation: launchToastContentFade 280ms ease-out 200ms both;
+}
+
+.launch-success-toast__action-icon {
+  transition:
+    opacity var(--launch-toast-enter-duration) var(--launch-toast-enter-ease),
+    transform var(--launch-toast-enter-duration) var(--launch-toast-enter-ease),
+    filter var(--launch-toast-enter-duration) var(--launch-toast-enter-ease);
 }
 
 @keyframes draftInnerShadowPulse {

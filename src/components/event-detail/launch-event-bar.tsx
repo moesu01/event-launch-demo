@@ -120,14 +120,14 @@ export function LaunchEventBar({
         {showLiveToast && (
           <div
             className={cn(
-              "launch-success-toast flex min-h-[56px] w-full max-w-[480px] cursor-default items-center justify-between gap-4 rounded-[var(--radius-md)] px-5 py-4 shadow-[var(--shadow-elevation-1)]",
+              "launch-success-toast flex min-h-[56px] w-full max-w-[480px] cursor-default items-center justify-between gap-4 rounded-[var(--radius-md)] px-5 py-4",
               isExitingLive && "launch-success-toast--exit",
             )}
             style={{ backgroundColor: "var(--launch-success-toast-bg)" }}
             role="status"
             aria-live="polite"
           >
-            <p className="text-base font-semibold leading-snug text-white">
+            <p className="launch-success-toast__message text-wrap-balance text-base font-semibold leading-snug text-white">
               {LIVE_TOAST_MESSAGE}
             </p>
             <button
@@ -135,12 +135,15 @@ export function LaunchEventBar({
               onClick={onGoToEventPage}
               className={cn(
                 primaryEventActionVariantClass.go_to_event,
-                "cursor-pointer",
+                "launch-success-toast__action cursor-pointer pl-3 pr-2.5 active:scale-[0.96] motion-safe:transition-transform motion-safe:duration-150 motion-safe:ease-out",
               )}
               aria-label="Go to Event"
             >
               <span>Go to Event</span>
-              <ExternalLink className="h-3.5 w-3.5 shrink-0" aria-hidden />
+              <ExternalLink
+                className="launch-success-toast__action-icon h-3.5 w-3.5 shrink-0"
+                aria-hidden
+              />
             </button>
           </div>
         )}
@@ -164,7 +167,7 @@ export function LaunchEventBar({
                 ? "launch-footer-button--loading"
                 : "launch-footer-button--wide",
               displayVariant === "launch"
-                ? "cursor-pointer"
+                ? "cursor-pointer active:scale-[0.96] motion-safe:transition-[width,border-radius,box-shadow,opacity,transform] motion-safe:active:duration-150"
                 : "cursor-not-allowed",
               displayVariant === "launch" && "launch-footer-button--enter",
               isButtonExitAnimating && "launch-footer-button--exit absolute",
@@ -196,20 +199,23 @@ export function LaunchEventBar({
                 className={cn(
                   "launch-footer-button__label absolute inset-0 flex items-center justify-center gap-3 text-white",
                   displayVariant === "launch"
-                    ? "opacity-100"
-                    : "pointer-events-none opacity-0",
+                    ? "launch-footer-button__label--visible"
+                    : "launch-footer-button__label--hidden",
                 )}
               >
-                <span>Launch Event</span>
-                <Rocket className="h-6 w-6 shrink-0" aria-hidden />
+                <span className="launch-footer-button__launch-text">Launch Event</span>
+                <Rocket
+                  className="launch-footer-button__launch-icon h-6 w-6 shrink-0"
+                  aria-hidden
+                />
               </span>
 
               <span
                 className={cn(
                   "launch-footer-button__label absolute inset-0 flex items-center justify-center",
                   displayVariant === "loading"
-                    ? "opacity-100"
-                    : "pointer-events-none opacity-0",
+                    ? "launch-footer-button__label--visible"
+                    : "launch-footer-button__label--hidden",
                 )}
               >
                 <Loader2
@@ -222,8 +228,8 @@ export function LaunchEventBar({
                 className={cn(
                   "launch-footer-button__label absolute inset-0 flex items-center justify-center gap-3 text-[var(--color-14)]",
                   displayVariant === "pending"
-                    ? "opacity-100"
-                    : "pointer-events-none opacity-0",
+                    ? "launch-footer-button__label--visible"
+                    : "launch-footer-button__label--hidden",
                 )}
               >
                 <span>Pending approval</span>
