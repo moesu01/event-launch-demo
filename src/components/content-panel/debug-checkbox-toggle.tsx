@@ -1,3 +1,5 @@
+import { Flex, Text } from "@chakra-ui/react"
+
 interface DebugCheckboxToggleProps {
   label: string
   checked: boolean
@@ -12,17 +14,35 @@ export function DebugCheckboxToggle({
   ariaLabel,
 }: DebugCheckboxToggleProps) {
   return (
-    <label className="flex w-[131px] cursor-pointer items-center gap-2 rounded-[var(--radius-md)] border border-[var(--color-3)] bg-[var(--color-1)] px-[var(--spacing-md)] py-2 shadow-[var(--shadow-elevation-2)]">
+    <Flex
+      as="label"
+      w="statusBadgeExpanded"
+      cursor="pointer"
+      align="center"
+      gap="2"
+      borderRadius="md"
+      borderWidth="1px"
+      borderColor="color.3"
+      bg="color.1"
+      px="md"
+      py="2"
+      boxShadow="elevation.2"
+    >
       <input
         type="checkbox"
         checked={checked}
         onChange={(event) => onChange(event.target.checked)}
-        className="h-3.5 w-3.5 shrink-0 accent-[var(--color-10)]"
+        style={{
+          height: "14px",
+          width: "14px",
+          flexShrink: 0,
+          accentColor: "var(--color-10)",
+        }}
         aria-label={ariaLabel}
       />
-      <span className="text-[11px] font-medium leading-snug text-[var(--chakra-gray-500)]">
+      <Text fontSize="11" fontWeight="medium" lineHeight="snug" color="gray.chakra500">
         {label}
-      </span>
-    </label>
+      </Text>
+    </Flex>
   )
 }

@@ -1,6 +1,6 @@
+import { Box, Button, Flex, Text } from "@chakra-ui/react"
 import { GripVertical, Star, Trash2 } from "lucide-react"
-import { headerActionButtonClass } from "../../lib/action-button-classes"
-import { cn } from "../../lib/cn"
+import { getHeaderActionButtonStyles } from "../../lib/primary-event-action-styles"
 import type { Performer } from "../../types/event"
 import { SocialStat } from "./social-stat"
 
@@ -17,15 +17,15 @@ const socialPlatforms = [
 
 export function LineupPerformerRow({ performer, actionsDisabled }: LineupPerformerRowProps) {
   return (
-    <div className="flex items-center gap-6 border-b border-[var(--color-15)] pb-3">
-      <GripVertical
-        className="h-4 w-4 shrink-0 text-[var(--color-16)]"
-        aria-hidden
-      />
+    <Flex align="center" gap="6" borderBottomWidth="1px" borderColor="color.15" pb="3">
+      <GripVertical size={16} style={{ flexShrink: 0, color: "var(--color-16)" }} aria-hidden />
 
-      <div className="flex min-w-0 flex-1 items-end gap-6">
-        <div
-          className="h-12 w-12 shrink-0 rounded-full"
+      <Flex minW="0" flex="1" align="flex-end" gap="6">
+        <Box
+          h="12"
+          w="12"
+          flexShrink={0}
+          borderRadius="full"
           style={{
             background:
               performer.avatarGradient ??
@@ -35,47 +35,47 @@ export function LineupPerformerRow({ performer, actionsDisabled }: LineupPerform
           aria-label={`${performer.name} avatar`}
         />
 
-        <div className="flex min-w-0 flex-col justify-between gap-0.5 self-stretch py-0.5">
-          <p className="m-0 text-base font-bold leading-6 text-[var(--color-2)]">
+        <Flex minW="0" direction="column" justify="space-between" gap="0.5" alignSelf="stretch" py="0.5">
+          <Text m="0" fontSize="base" fontWeight="bold" lineHeight="24px" color="color.2">
             {performer.name}
-          </p>
-          <div className="flex flex-wrap items-center gap-3">
+          </Text>
+          <Flex flexWrap="wrap" align="center" gap="3">
             {socialPlatforms.map(({ key, field }) => {
               const value = performer[field]
               if (value == null) return null
               return <SocialStat key={key} platform={key} value={value} />
             })}
-          </div>
-        </div>
-      </div>
+          </Flex>
+        </Flex>
+      </Flex>
 
-      <div className="flex shrink-0 items-center gap-3">
-        <button
+      <Flex flexShrink={0} align="center" gap="3">
+        <Button
           type="button"
+          unstyled
+          css={getHeaderActionButtonStyles({
+            px: "3",
+            fontSize: "13",
+            fontWeight: "medium",
+            color: "color.2",
+          })}
           disabled={actionsDisabled}
-          className={cn(
-            headerActionButtonClass,
-            "px-3 text-[13px] font-medium text-[var(--color-2)]",
-            actionsDisabled && "cursor-not-allowed opacity-40",
-          )}
+          cursor={actionsDisabled ? "not-allowed" : "pointer"}
+          opacity={actionsDisabled ? 0.4 : 1}
           aria-label={`Edit ${performer.name}`}
         >
           Edit
-        </button>
+        </Button>
 
-        <span
-          className="h-7 w-px shrink-0 bg-[var(--color-15)]"
-          aria-hidden
-        />
+        <Box h="7" w="px" flexShrink={0} bg="color.15" aria-hidden />
 
-        <button
+        <Button
           type="button"
+          unstyled
+          css={getHeaderActionButtonStyles({ w: "10" })}
           disabled={actionsDisabled}
-          className={cn(
-            headerActionButtonClass,
-            "w-10",
-            actionsDisabled && "cursor-not-allowed opacity-40",
-          )}
+          cursor={actionsDisabled ? "not-allowed" : "pointer"}
+          opacity={actionsDisabled ? 0.4 : 1}
           aria-label={
             performer.isHeadliner
               ? `Remove ${performer.name} as headliner`
@@ -83,27 +83,27 @@ export function LineupPerformerRow({ performer, actionsDisabled }: LineupPerform
           }
         >
           <Star
-            className={cn(
-              "h-4 w-4 text-[var(--color-2)]",
-              performer.isHeadliner && "fill-[var(--color-2)]",
-            )}
+            size={16}
+            style={{
+              color: "var(--color-2)",
+              fill: performer.isHeadliner ? "var(--color-2)" : "none",
+            }}
             aria-hidden
           />
-        </button>
+        </Button>
 
-        <button
+        <Button
           type="button"
+          unstyled
+          css={getHeaderActionButtonStyles({ w: "10" })}
           disabled={actionsDisabled}
-          className={cn(
-            headerActionButtonClass,
-            "w-10",
-            actionsDisabled && "cursor-not-allowed opacity-40",
-          )}
+          cursor={actionsDisabled ? "not-allowed" : "pointer"}
+          opacity={actionsDisabled ? 0.4 : 1}
           aria-label={`Delete ${performer.name}`}
         >
-          <Trash2 className="h-4 w-4 text-[var(--color-2)]" aria-hidden />
-        </button>
-      </div>
-    </div>
+          <Trash2 size={16} style={{ color: "var(--color-2)" }} aria-hidden />
+        </Button>
+      </Flex>
+    </Flex>
   )
 }

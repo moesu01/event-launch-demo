@@ -1,3 +1,4 @@
+import { Box, Flex } from "@chakra-ui/react"
 import { ContentPanel } from "../components/content-panel/content-panel"
 import { ContentPanelInnerShadowOverlay } from "../components/event-detail/content-panel-inner-shadow-overlay"
 import { EventSidebar } from "../components/content-panel/event-sidebar"
@@ -11,7 +12,6 @@ import { OverviewStatsGrid } from "../components/event-detail/overview-stats-gri
 import { TicketSalesChart } from "../components/event-detail/ticket-sales-chart"
 import { TimelineSection } from "../components/event-detail/timeline-section"
 import { mockEvent } from "../data/mock-event"
-import { cn } from "../lib/cn"
 import { getEventViewModel } from "../lib/get-event-view-model"
 import type { EventStatus } from "../types/event"
 import type { LaunchPhase, LaunchPostStatus } from "../types/launch"
@@ -69,8 +69,19 @@ export function EventDetailPage({
   const isPendingLaunchReveal =
     launchPostStatus === "pending_approval" && isLaunchRevealPhase
 
+  const scrollClassName = [
+    "launch-scroll-padding",
+    launchPhase === "loading" && "launch-content-pulse",
+    (launchPhase === "success" ||
+      launchPhase === "releasing" ||
+      launchPhase === "exiting") &&
+      "launch-scroll-settle",
+  ]
+    .filter(Boolean)
+    .join(" ")
+
   return (
-    <div className="flex min-h-0 flex-1 flex-col">
+    <Flex minH="0" flex="1" direction="column">
       <ContentPanel
         sidebar={
           <EventSidebar
@@ -84,20 +95,23 @@ export function EventDetailPage({
           />
         }
       >
-        <div className="relative flex min-h-0 min-w-0 flex-1 flex-col">
-          <div className="relative min-h-0 flex-1">
-            <div
-              className={cn(
-                "launch-scroll-padding h-full min-h-0 overflow-y-auto px-6 pt-6",
-                showLaunchFooter ? "pb-[88px]" : "pb-6",
-                launchPhase === "loading" && "launch-content-pulse",
-                (launchPhase === "success" ||
-                  launchPhase === "releasing" ||
-                  launchPhase === "exiting") &&
-                  "launch-scroll-settle",
-              )}
+        <Flex position="relative" minH="0" minW="0" flex="1" direction="column">
+          <Box position="relative" minH="0" flex="1">
+            <Box
+              className={scrollClassName}
+              h="full"
+              minH="0"
+              overflowY="auto"
+              px="6"
+              pt="6"
+              pb={showLaunchFooter ? "launchScrollPadding" : "6"}
             >
-              <div className="mx-auto flex max-w-[996px] flex-col gap-6">
+              <Flex
+                mx="auto"
+                maxW="pageContentMax"
+                direction="column"
+                gap="6"
+              >
                 <EventDetailsHeader
                   event={mockEvent}
                   actionsDisabled={viewModel.actionsDisabled}
@@ -129,26 +143,15 @@ export function EventDetailPage({
                   description={mockEvent.description}
                   actionsDisabled={viewModel.actionsDisabled}
                 />
-              </div>
-            </div>
+              </Flex>
+            </Box>
 
             <ContentPanelInnerShadowOverlay
               launchPhase={launchPhase}
               launchPostStatus={launchPostStatus}
               contentPanelInnerShadow={effectiveInnerShadow}
             />
-
-            {/* Scan beam — superseded by content-panel-inner-shadow-pulse
-            {launchPhase === "loading" && (
-              <div
-                aria-hidden
-                className="launch-scan-overlay pointer-events-none absolute inset-0 z-[2]"
-              >
-                <div className="launch-scan-beam" />
-              </div>
-            )}
-            */}
-          </div>
+          </Box>
 
           {showLaunchFooter && (
             <LaunchEventBar
@@ -159,8 +162,8 @@ export function EventDetailPage({
               onGoToEventPage={onGoToEventPage}
             />
           )}
-        </div>
+        </Flex>
       </ContentPanel>
-    </div>
+    </Flex>
   )
 }

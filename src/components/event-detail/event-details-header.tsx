@@ -1,6 +1,6 @@
+import { Box, Button, Flex, Heading, Text } from "@chakra-ui/react"
 import { Calendar, MoreVertical, Pencil } from "lucide-react"
-import { headerActionButtonClass } from "../../lib/action-button-classes"
-import { cn } from "../../lib/cn"
+import { getHeaderActionButtonStyles } from "../../lib/primary-event-action-styles"
 import type { MockEvent, PrimaryEventAction } from "../../types/event"
 import { LaunchLiveReveal } from "./launch-live-reveal"
 import { EventHeaderPrimaryAction } from "./event-header-primary-action"
@@ -19,101 +19,130 @@ export function EventDetailsHeader({
   primaryActionReveal = false,
 }: EventDetailsHeaderProps) {
   return (
-    <section className="flex gap-6" aria-label="Event details">
-      <div
-        className="h-[150px] w-[150px] shrink-0 rounded-[var(--radius-md)] shadow-[var(--shadow-sm)]"
+    <Flex as="section" gap="6" aria-label="Event details">
+      <Box
+        h="eventImage"
+        w="eventImage"
+        flexShrink={0}
+        borderRadius="md"
+        boxShadow="sm"
         style={{ background: event.imageGradient }}
         role="img"
         aria-label="Event artwork"
       />
 
-      <div className="flex min-w-0 flex-1 gap-6">
-        <div className="flex min-w-0 flex-1 flex-col gap-2">
-          <div className="flex items-start gap-6">
-            <h1 className="min-w-0 flex-1 text-xl font-bold leading-[1.15] text-[var(--tailwind-gray-800)]">
+      <Flex minW="0" flex="1" gap="6">
+        <Flex minW="0" flex="1" direction="column" gap="2">
+          <Flex align="flex-start" gap="6">
+            <Heading
+              as="h1"
+              minW="0"
+              flex="1"
+              fontSize="xl"
+              fontWeight="bold"
+              lineHeight="1.15"
+              color="gray.tailwind800"
+            >
               {event.title}
-            </h1>
-            <button
+            </Heading>
+            <Button
               type="button"
+              unstyled
+              display="flex"
+              h="9"
+              flexShrink={0}
+              alignItems="center"
+              borderRadius="md"
+              borderWidth="1px"
+              borderColor="color.3"
+              px="3"
               disabled={actionsDisabled}
-              className={cn(
-                "flex h-9 shrink-0 items-center rounded-[var(--radius-md)] border border-[var(--color-3)] px-3",
-                actionsDisabled && "cursor-not-allowed opacity-40",
-              )}
+              cursor={actionsDisabled ? "not-allowed" : "pointer"}
+              opacity={actionsDisabled ? 0.4 : 1}
               aria-label="Edit event title"
             >
-              <Pencil className="h-4 w-4 text-[var(--color-2)]" />
-            </button>
-          </div>
+              <Pencil size={16} color="var(--color-2)" />
+            </Button>
+          </Flex>
 
-          <div className="flex flex-wrap items-center gap-2">
+          <Flex flexWrap="wrap" align="center" gap="2">
             {event.tags.map((tag) => (
-              <span
+              <Text
+                as="span"
                 key={tag}
-                className="rounded-[var(--radius-sm)] bg-[var(--color-8)] px-3 py-1 text-xs font-medium text-[var(--color-7)]"
+                borderRadius="sm"
+                bg="color.8"
+                px="3"
+                py="1"
+                fontSize="xs"
+                fontWeight="medium"
+                color="color.7"
               >
                 {tag}
-              </span>
+              </Text>
             ))}
-            <button
+            <Button
               type="button"
+              unstyled
+              fontSize="xs"
+              fontWeight="medium"
+              color="color.10"
               disabled={actionsDisabled}
-              className={cn(
-                "text-xs font-medium text-[var(--color-10)]",
-                actionsDisabled && "cursor-not-allowed opacity-40",
-              )}
+              cursor={actionsDisabled ? "not-allowed" : "pointer"}
+              opacity={actionsDisabled ? 0.4 : 1}
             >
               Edit Event Tag
-            </button>
-          </div>
+            </Button>
+          </Flex>
 
-          <div className="flex flex-col gap-0.5">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="text-[13px] font-semibold text-[var(--color-14)]">
+          <Flex direction="column" gap="0.5">
+            <Flex flexWrap="wrap" align="center" gap="2">
+              <Text textStyle="bodySmSemibold" color="color.14">
                 {event.venueName}
-              </span>
-              <button
+              </Text>
+              <Button
                 type="button"
+                unstyled
+                fontSize="xs"
+                fontWeight="medium"
+                color="color.10"
                 disabled={actionsDisabled}
-                className={cn(
-                  "text-xs font-medium text-[var(--color-10)]",
-                  actionsDisabled && "cursor-not-allowed opacity-40",
-                )}
+                cursor={actionsDisabled ? "not-allowed" : "pointer"}
+                opacity={actionsDisabled ? 0.4 : 1}
               >
                 Change Venue
-              </button>
-            </div>
-            <p className="text-xs font-medium text-[var(--color-16)]">
+              </Button>
+            </Flex>
+            <Text fontSize="xs" fontWeight="medium" color="color.16">
               {event.venueAddress}
-            </p>
-          </div>
+            </Text>
+          </Flex>
 
-          <div className="flex items-center gap-2 text-[13px] font-semibold text-[var(--color-14)]">
-            <Calendar className="h-4 w-4 shrink-0 text-[var(--color-16)]" aria-hidden />
-            <span>{event.datetime}</span>
-          </div>
-        </div>
+          <Flex align="center" gap="2" textStyle="bodySmSemibold" color="color.14">
+            <Calendar size={16} style={{ flexShrink: 0, color: "var(--color-16)" }} aria-hidden />
+            <Text as="span">{event.datetime}</Text>
+          </Flex>
+        </Flex>
 
-        <div className="flex shrink-0 items-start gap-3">
+        <Flex flexShrink={0} align="flex-start" gap="3">
           {primaryEventAction && (
             <LaunchLiveReveal active={primaryActionReveal}>
               <EventHeaderPrimaryAction action={primaryEventAction} />
             </LaunchLiveReveal>
           )}
-          <button
+          <Button
             type="button"
+            unstyled
+            css={getHeaderActionButtonStyles({ w: "10" })}
             disabled={actionsDisabled}
-            className={cn(
-              headerActionButtonClass,
-              "w-10",
-              actionsDisabled && "cursor-not-allowed opacity-40",
-            )}
+            cursor={actionsDisabled ? "not-allowed" : "pointer"}
+            opacity={actionsDisabled ? 0.4 : 1}
             aria-label="More actions"
           >
-            <MoreVertical className="h-4 w-4 text-[var(--color-14)]" />
-          </button>
-        </div>
-      </div>
-    </section>
+            <MoreVertical size={16} color="var(--color-14)" />
+          </Button>
+        </Flex>
+      </Flex>
+    </Flex>
   )
 }

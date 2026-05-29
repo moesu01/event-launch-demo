@@ -1,4 +1,4 @@
-import { cn } from "../../lib/cn"
+import { Flex, Text } from "@chakra-ui/react"
 
 interface SocialStatProps {
   platform: "instagram" | "spotify" | "tiktok"
@@ -72,14 +72,23 @@ const platformIcons = {
 
 export function SocialStat({ platform, value }: SocialStatProps) {
   const Icon = platformIcons[platform]
-  const iconSize = platform === "tiktok" ? "h-3 w-3" : "h-3.5 w-3.5"
+  const iconSize = platform === "tiktok" ? "3" : "3.5"
 
   return (
-    <span className="flex items-center gap-0.5 px-px">
-      <span className={cn("flex shrink-0 items-center justify-center", iconSize)}>
+    <Flex as="span" align="center" gap="0.5" px="1px">
+      <Flex
+        as="span"
+        flexShrink={0}
+        align="center"
+        justify="center"
+        h={iconSize}
+        w={iconSize}
+      >
         <Icon />
-      </span>
-      <span className="text-xs leading-[18px] text-[var(--color-2)]">{value}</span>
-    </span>
+      </Flex>
+      <Text as="span" fontSize="xs" lineHeight="18px" color="color.2">
+        {value}
+      </Text>
+    </Flex>
   )
 }

@@ -1,3 +1,4 @@
+import { Flex } from "@chakra-ui/react"
 import { DebugCheckboxToggle } from "./debug-checkbox-toggle"
 
 interface DebugPrototypeControlsProps {
@@ -14,7 +15,7 @@ export function DebugPrototypeControls({
   onCancelInCycleChange,
 }: DebugPrototypeControlsProps) {
   return (
-    <div className="flex flex-col items-center gap-[var(--spacing-6)]">
+    <Flex direction="column" align="center" gap="sp6">
       <DebugCheckboxToggle
         label="Auto approve"
         checked={isAutoApproveEnabled}
@@ -27,6 +28,6 @@ export function DebugPrototypeControls({
         onChange={onCancelInCycleChange}
         ariaLabel="Include cancelled status when cycling event status"
       />
-    </div>
+    </Flex>
   )
 }

@@ -1,9 +1,9 @@
+import { Box, Flex, Text } from "@chakra-ui/react"
+
 interface PerformanceMetricCardProps {
   label: string
   value: string
-  /** Reserves space for the insight bubble column (Figma Bubble=Yes variant) */
   showInsightSpacer?: boolean
-  /** fixed = ticket metrics (~259px); flex = payouts row (equal columns, min 210px) */
   size?: "fixed" | "flex"
 }
 
@@ -14,42 +14,72 @@ export function PerformanceMetricCard({
   size = "fixed",
 }: PerformanceMetricCardProps) {
   return (
-    <div
-      className={
-        size === "flex"
-          ? "relative flex h-[71px] min-w-[210px] flex-1 flex-col items-start gap-[6px] overflow-hidden rounded-[10px] border border-solid border-[var(--color-15)] p-4 shadow-[var(--performance-card-drop-shadow)]"
-          : "relative flex h-[71px] w-[258.67px] shrink-0 flex-col items-start gap-[6px] overflow-hidden rounded-[10px] border border-solid border-[var(--color-15)] p-4 shadow-[var(--performance-card-drop-shadow)]"
-      }
+    <Flex
+      position="relative"
+      direction="column"
+      align="flex-start"
+      gap="sp6"
+      overflow="hidden"
+      borderRadius="r10"
+      borderWidth="1px"
+      borderStyle="solid"
+      borderColor="color.15"
+      p="4"
+      boxShadow="performanceCard.drop"
+      h="performanceCardHeight"
+      w={size === "flex" ? undefined : "performanceCardWidth"}
+      minW={size === "flex" ? "210px" : undefined}
+      flex={size === "flex" ? "1" : undefined}
+      flexShrink={size === "flex" ? undefined : 0}
     >
-      <div
+      <Box
         aria-hidden
-        className="pointer-events-none absolute inset-0 rounded-[10px]"
+        pointerEvents="none"
+        position="absolute"
+        inset="0"
+        borderRadius="r10"
         style={{ background: "var(--performance-card-bg)" }}
       />
-      <div
+      <Box
         aria-hidden
-        className="pointer-events-none absolute inset-0 rounded-[inherit] shadow-[var(--performance-card-inset-shadow)]"
+        pointerEvents="none"
+        position="absolute"
+        inset="0"
+        borderRadius="inherit"
+        style={{ boxShadow: "var(--performance-card-inset-shadow)" }}
       />
 
-      <div className="relative z-[1] flex w-full shrink-0 items-center gap-2.5">
-        <p className="m-0 text-[13px] font-medium leading-none tracking-[-0.39px] whitespace-nowrap text-[var(--color-16)]">
+      <Flex position="relative" zIndex="1" w="full" flexShrink={0} align="center" gap="2.5">
+        <Text
+          m="0"
+          fontSize="13"
+          fontWeight="medium"
+          lineHeight="1"
+          letterSpacing="-0.39px"
+          whiteSpace="nowrap"
+          color="color.16"
+        >
           {label}
-        </p>
-      </div>
+        </Text>
+      </Flex>
 
-      <div className="relative z-[1] flex shrink-0 items-end gap-[6px]">
-        <div className="flex flex-col items-start justify-center">
-          <p className="m-0 text-[20px] font-normal leading-none whitespace-nowrap text-[var(--color-17)]">
+      <Flex position="relative" zIndex="1" flexShrink={0} align="flex-end" gap="sp6">
+        <Flex direction="column" align="flex-start" justify="center">
+          <Text
+            m="0"
+            fontSize="20px"
+            fontWeight="normal"
+            lineHeight="1"
+            whiteSpace="nowrap"
+            color="color.17"
+          >
             {value}
-          </p>
-        </div>
+          </Text>
+        </Flex>
         {showInsightSpacer && (
-          <div
-            className="h-[18px] w-9 shrink-0 rounded-[40px] py-[3px]"
-            aria-hidden
-          />
+          <Box h="18px" w="9" flexShrink={0} borderRadius="40px" py="3px" aria-hidden />
         )}
-      </div>
-    </div>
+      </Flex>
+    </Flex>
   )
 }

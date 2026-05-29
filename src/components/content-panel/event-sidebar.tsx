@@ -1,3 +1,4 @@
+import { Box, Button, Flex } from "@chakra-ui/react"
 import { useState } from "react"
 import type { Icon } from "@phosphor-icons/react"
 import {
@@ -12,7 +13,6 @@ import {
   Users,
 } from "@phosphor-icons/react"
 import type { StatusBadgeConfig } from "../../types/event"
-import { cn } from "../../lib/cn"
 import { DebugPrototypeControls } from "./debug-prototype-controls"
 import { EventStatusBadge } from "./event-status-badge"
 import { SidebarNavItem } from "./sidebar-nav-item"
@@ -57,25 +57,59 @@ export function EventSidebar({
   }
 
   return (
-    <aside
-      className={cn(
-        "sidebar-transition flex h-full shrink-0 flex-col items-center gap-[var(--spacing-xl)] overflow-hidden border-r border-[var(--color-3)] bg-[var(--color-1)] pt-6 pb-3 shadow-[var(--shadow-elevation-2)]",
-        isExpanded ? "w-[155px]" : "w-[64px]",
-      )}
+    <Flex
+      as="aside"
+      className="sidebar-transition"
+      h="full"
+      flexShrink={0}
+      direction="column"
+      align="center"
+      gap="xl"
+      overflow="hidden"
+      borderRightWidth="1px"
+      borderColor="color.3"
+      bg="color.1"
+      pt="6"
+      pb="3"
+      boxShadow="elevation.2"
+      w={isExpanded ? "sidebarExpanded" : "sidebarCollapsed"}
       aria-label="Event navigation"
       aria-expanded={isExpanded}
     >
-      <button
+      <Button
         type="button"
         onClick={handleToggleSidebar}
-        className="flex shrink-0 cursor-pointer items-center justify-center rounded-[var(--radius-sm)] p-1 transition-colors duration-150 ease-out hover:bg-[var(--color-8)] active:scale-[0.96] motion-safe:transition-[background-color,transform] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-10)]"
+        unstyled
+        display="flex"
+        flexShrink={0}
+        cursor="pointer"
+        alignItems="center"
+        justifyContent="center"
+        borderRadius="sm"
+        p="1"
+        transition="background-color 150ms ease-out, transform 150ms"
+        _hover={{ bg: "color.8" }}
+        _active={{ transform: "scale(0.96)" }}
+        _focusVisible={{
+          outline: "2px solid",
+          outlineColor: "color.10",
+          outlineOffset: "2px",
+        }}
         aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         aria-pressed={isCollapsed}
       >
         <SidebarToggleIcon isCollapsed={isCollapsed} />
-      </button>
+      </Button>
 
-      <nav className="flex w-full flex-1 flex-col items-end border-b border-[var(--color-3)]">
+      <Flex
+        as="nav"
+        w="full"
+        flex="1"
+        direction="column"
+        align="flex-end"
+        borderBottomWidth="1px"
+        borderColor="color.3"
+      >
         {NAV_ITEMS.map((item, index) => (
           <SidebarNavItem
             key={item.label}
@@ -86,32 +120,30 @@ export function EventSidebar({
             staggerIndex={index}
           />
         ))}
-      </nav>
+      </Flex>
 
-      <div className="flex w-full flex-col items-center gap-[var(--spacing-6)]">
+      <Flex w="full" direction="column" align="center" gap="sp6">
         {showDebugControls && (
-          <div
-            className={cn(
-              "sidebar-reveal-grid w-full",
-              isExpanded && "sidebar-reveal-grid--open",
-            )}
+          <Box
+            className={isExpanded ? "sidebar-reveal-grid sidebar-reveal-grid--open" : "sidebar-reveal-grid"}
+            w="full"
           >
-            <div className="sidebar-reveal-grid__inner">
+            <Box className="sidebar-reveal-grid__inner">
               <DebugPrototypeControls
                 isAutoApproveEnabled={isAutoApproveEnabled}
                 onAutoApproveChange={onAutoApproveChange}
                 isCancelInCycleEnabled={isCancelInCycleEnabled}
                 onCancelInCycleChange={onCancelInCycleChange}
               />
-            </div>
-          </div>
+            </Box>
+          </Box>
         )}
         <EventStatusBadge
           badge={statusBadge}
           onClick={onStatusCycle}
           isExpanded={isExpanded}
         />
-      </div>
-    </aside>
+      </Flex>
+    </Flex>
   )
 }

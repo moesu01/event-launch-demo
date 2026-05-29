@@ -1,6 +1,7 @@
+import { Button } from "@chakra-ui/react"
 import { Ban, ExternalLink, Hourglass } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
-import { primaryEventActionVariantClass } from "../../lib/primary-event-action-styles"
+import { getPrimaryEventActionStyles } from "../../lib/primary-event-action-styles"
 import type { PrimaryEventAction } from "../../types/event"
 
 interface EventHeaderPrimaryActionProps {
@@ -18,13 +19,14 @@ export function EventHeaderPrimaryAction({ action }: EventHeaderPrimaryActionPro
   const Icon = actionIcons[action.variant]
 
   return (
-    <button
+    <Button
       type="button"
-      className={primaryEventActionVariantClass[action.variant]}
+      unstyled
+      css={getPrimaryEventActionStyles(action.variant)}
       aria-label={action.label}
     >
       <span>{action.label}</span>
-      <Icon className="h-3.5 w-3.5 shrink-0" aria-hidden />
-    </button>
+      <Icon size={14} style={{ flexShrink: 0 }} aria-hidden />
+    </Button>
   )
 }

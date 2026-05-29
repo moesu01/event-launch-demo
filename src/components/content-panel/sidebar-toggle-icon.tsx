@@ -1,35 +1,35 @@
+import { Box, Flex } from "@chakra-ui/react"
 import { Sidebar, SidebarSimple } from "@phosphor-icons/react"
-import { cn } from "../../lib/cn"
 
 interface SidebarToggleIconProps {
   isCollapsed: boolean
 }
 
 export function SidebarToggleIcon({ isCollapsed }: SidebarToggleIconProps) {
-  const iconClassName = "text-[var(--chakra-gray-600)]"
-
   return (
-    <span className="relative block size-6" aria-hidden>
-      <span
-        className={cn(
-          "sidebar-icon-layer absolute inset-0 flex items-center justify-center",
-          isCollapsed
-            ? "scale-100 opacity-100 blur-0"
-            : "scale-[0.25] opacity-0 blur-[4px]",
-        )}
+    <Box position="relative" display="block" boxSize="6" aria-hidden>
+      <Flex
+        className="sidebar-icon-layer"
+        position="absolute"
+        inset="0"
+        align="center"
+        justify="center"
+        transform={isCollapsed ? "scale(1)" : "scale(0.25)"}
+        opacity={isCollapsed ? 1 : 0}
+        filter={isCollapsed ? "blur(0)" : "blur(4px)"}
       >
-        <Sidebar size={24} weight="fill" className={iconClassName} />
-      </span>
-      <span
-        className={cn(
-          "sidebar-icon-layer flex items-center justify-center",
-          isCollapsed
-            ? "scale-[0.25] opacity-0 blur-[4px]"
-            : "scale-100 opacity-100 blur-0",
-        )}
+        <Sidebar size={24} weight="fill" color="var(--chakra-gray-600)" />
+      </Flex>
+      <Flex
+        className="sidebar-icon-layer"
+        align="center"
+        justify="center"
+        transform={isCollapsed ? "scale(0.25)" : "scale(1)"}
+        opacity={isCollapsed ? 0 : 1}
+        filter={isCollapsed ? "blur(4px)" : "blur(0)"}
       >
-        <SidebarSimple size={24} weight="fill" className={iconClassName} />
-      </span>
-    </span>
+        <SidebarSimple size={24} weight="fill" color="var(--chakra-gray-600)" />
+      </Flex>
+    </Box>
   )
 }

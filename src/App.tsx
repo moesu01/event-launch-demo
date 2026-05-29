@@ -1,3 +1,4 @@
+import { Flex } from "@chakra-ui/react"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { getNextEventStatus } from "./lib/cycle-event-status"
 import { useDebugControlsShortcut } from "./lib/use-debug-controls-shortcut"
@@ -143,7 +144,7 @@ export function App() {
   }, [])
 
   return (
-    <main className="flex h-screen flex-col px-4 py-6">
+    <Flex as="main" direction="column" h="100vh" px="4" py="6">
       <EventDetailPage
         status={status}
         launchPhase={launchPhase}
@@ -158,6 +159,6 @@ export function App() {
         onLaunch={handleLaunch}
         onGoToEventPage={handleGoToEventPage}
       />
-    </main>
+    </Flex>
   )
 }

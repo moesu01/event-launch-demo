@@ -1,5 +1,5 @@
+import { Flex, Text } from "@chakra-ui/react"
 import type { Icon } from "@phosphor-icons/react"
-import { cn } from "../../lib/cn"
 
 interface SidebarNavItemProps {
   label: string
@@ -21,39 +21,53 @@ export function SidebarNavItem({
   const labelDelayMs = isExpanded ? staggerIndex * LABEL_STAGGER_MS : 0
 
   return (
-    <div
-      className={cn(
-        "sidebar-nav-item relative flex h-12 w-full cursor-pointer items-center py-3",
-        isExpanded
-          ? "gap-[var(--spacing-md)] pr-3 pl-6"
-          : "gap-0 pr-0 pl-5",
-        isActive
-          ? "bg-[var(--color-2)] hover:bg-[var(--color-17)]"
-          : "opacity-70 hover:bg-[var(--color-8)] hover:opacity-100",
-      )}
-      role="presentation"
+    <Flex
+      className="sidebar-nav-item"
+      role="group"
+      position="relative"
+      h="12"
+      w="full"
+      cursor="pointer"
+      align="center"
+      py="3"
+      gap={isExpanded ? "md" : "0"}
+      pr={isExpanded ? "3" : "0"}
+      pl={isExpanded ? "6" : "5"}
+      bg={isActive ? "color.2" : undefined}
+      _hover={{ bg: isActive ? "color.17" : "color.8" }}
     >
-      <div className="sidebar-icon-slot flex items-center">
+      <Flex className="sidebar-icon-slot" align="center">
         <IconComponent
           size={24}
           weight="regular"
-          className={cn("shrink-0", isActive ? "text-white" : "text-[var(--color-2)]")}
+          color={isActive ? "white" : "var(--color-2)"}
+          style={{
+            flexShrink: 0,
+            opacity: isActive ? 1 : 0.5,
+          }}
+          className={isActive ? undefined : "sidebar-nav-icon"}
           aria-hidden
         />
-      </div>
-      <span
-        className={cn(
-          "sidebar-label-transition min-w-0 overflow-hidden text-sm font-medium whitespace-nowrap",
-          isExpanded
-            ? "translate-x-0 opacity-100"
-            : "pointer-events-none absolute w-0 -translate-x-1 opacity-0",
-          isActive ? "font-bold text-white" : "text-[var(--color-2)]",
-        )}
+      </Flex>
+      <Text
+        className="sidebar-label-transition"
+        minW="0"
+        overflow="hidden"
+        fontSize="sm"
+        whiteSpace="nowrap"
+        position={isExpanded ? undefined : "absolute"}
+        w={isExpanded ? undefined : "0"}
+        transform={isExpanded ? "translateX(0)" : "translateX(-4px)"}
+        opacity={isExpanded ? (isActive ? 1 : 0.7) : 0}
+        pointerEvents={isExpanded ? undefined : "none"}
+        fontWeight={isActive ? "bold" : "520"}
+        color={isActive ? "white" : "color.2"}
+        _groupHover={{ opacity: isActive ? 1 : isExpanded ? 1 : 0 }}
         style={{ transitionDelay: `${labelDelayMs}ms` }}
         aria-hidden={!isExpanded}
       >
         {label}
-      </span>
-    </div>
+      </Text>
+    </Flex>
   )
 }

@@ -1,3 +1,4 @@
+import { Flex } from "@chakra-ui/react"
 import type { ReactNode } from "react"
 
 interface ContentPanelProps {
@@ -7,11 +8,21 @@ interface ContentPanelProps {
 
 export function ContentPanel({ sidebar, children }: ContentPanelProps) {
   return (
-    <div className="mx-auto flex h-full min-h-0 w-full max-w-[1195px] overflow-hidden rounded-[var(--radius-lg)] bg-[var(--color-1)] shadow-[var(--shadow-elevation-1)]">
+    <Flex
+      mx="auto"
+      h="full"
+      minH="0"
+      w="full"
+      maxW="contentPanelMax"
+      overflow="hidden"
+      borderRadius="lg"
+      bg="color.1"
+      boxShadow="elevation.1"
+    >
       {sidebar}
-      <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-[var(--color-1)]">
+      <Flex minH="0" minW="0" flex="1" direction="column" overflow="hidden" bg="color.1">
         {children}
-      </div>
-    </div>
+      </Flex>
+    </Flex>
   )
 }

@@ -1,5 +1,5 @@
+import { Box } from "@chakra-ui/react"
 import { useLayoutEffect, useRef, useState, type ReactNode } from "react"
-import { cn } from "../../lib/cn"
 import {
   LAUNCH_LIVE_REVEAL_MS,
   LAUNCH_LIVE_REVEAL_STAGGER_MS,
@@ -38,38 +38,49 @@ export function LaunchLiveReveal({
 
   if (!expand) {
     return (
-      <div
-        className={cn(
-          active && "launch-live-reveal",
-          active && stagger && "launch-live-reveal--stagger",
-        )}
+      <Box
+        className={
+          active
+            ? stagger
+              ? "launch-live-reveal launch-live-reveal--stagger"
+              : "launch-live-reveal"
+            : undefined
+        }
         style={active || hasRevealedRef.current ? revealStyle : undefined}
       >
         {children}
-      </div>
+      </Box>
     )
   }
 
   return (
-    <div
-      className={cn(
-        "launch-reveal-expand",
-        isExpanded && "launch-reveal-expand--open",
-        stagger && "launch-reveal-expand--stagger",
-      )}
+    <Box
+      className={
+        [
+          "launch-reveal-expand",
+          isExpanded && "launch-reveal-expand--open",
+          stagger && "launch-reveal-expand--stagger",
+        ]
+          .filter(Boolean)
+          .join(" ") || undefined
+      }
       style={revealStyle}
     >
-      <div className="launch-reveal-expand__inner">
-        <div
-          className={cn(
-            "launch-reveal-expand__content",
-            isExpanded && "launch-reveal-expand__content--visible",
-            stagger && "launch-reveal-expand__content--stagger",
-          )}
+      <Box className="launch-reveal-expand__inner">
+        <Box
+          className={
+            [
+              "launch-reveal-expand__content",
+              isExpanded && "launch-reveal-expand__content--visible",
+              stagger && "launch-reveal-expand__content--stagger",
+            ]
+              .filter(Boolean)
+              .join(" ") || undefined
+          }
         >
           {children}
-        </div>
-      </div>
-    </div>
+        </Box>
+      </Box>
+    </Box>
   )
 }

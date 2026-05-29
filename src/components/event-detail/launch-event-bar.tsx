@@ -1,7 +1,7 @@
+import { Box, Flex, Text, chakra } from "@chakra-ui/react"
 import { useLayoutEffect, useState } from "react"
 import { ExternalLink, Hourglass, Loader2, Rocket } from "lucide-react"
 import { cn } from "../../lib/cn"
-import { primaryEventActionVariantClass } from "../../lib/primary-event-action-styles"
 import type { EventStatus } from "../../types/event"
 import type { LaunchPhase, LaunchPostStatus } from "../../types/launch"
 
@@ -16,15 +16,6 @@ interface LaunchEventBarProps {
 const LIVE_TOAST_MESSAGE = "Your event is live!"
 
 const LAUNCH_FOOTER_SPRING_MS = 150
-
-const launchFooterButtonBaseClass =
-  "launch-footer-button relative flex h-[56px] shrink-0 items-center justify-center text-base font-semibold leading-none"
-
-const launchFooterGradientLayerClass =
-  "launch-footer-button__layer pointer-events-none absolute inset-0 shadow-[0px_1px_1px_rgba(0,0,0,0.05)]"
-
-const launchFooterPendingLayerClass =
-  "launch-footer-button__layer pointer-events-none absolute inset-0 border border-[var(--color-3)] bg-[var(--color-1)] shadow-[var(--shadow-sm)]"
 
 type FooterControlVariant = "launch" | "loading" | "pending"
 
@@ -105,36 +96,65 @@ export function LaunchEventBar({
   }, [isButtonExiting])
 
   return (
-    <div
+    <Flex
       className={cn(
-        "launch-footer-fade absolute inset-x-0 bottom-0 z-10 flex min-h-[76px] flex-col justify-end px-6 pb-2.5 pt-6",
+        "launch-footer-fade",
         isExitingLive && "launch-footer-fade--exit",
       )}
+      position="absolute"
+      insetX="0"
+      bottom="0"
+      zIndex="10"
+      direction="column"
+      justify="flex-end"
+      minH="launchFooterMinH"
+      px="6"
+      pb="2.5"
+      pt="6"
     >
-      <div
+      <Box
         aria-hidden
-        className="pointer-events-none absolute inset-0"
+        pointerEvents="none"
+        position="absolute"
+        inset="0"
         style={{ background: "var(--launch-event-bar-bg)" }}
       />
-      <div className="relative flex w-full justify-center">
+      <Flex position="relative" w="full" justify="center">
         {showLiveToast && (
-          <div
+          <Flex
             className={cn(
-              "launch-success-toast flex min-h-[56px] w-full max-w-[480px] cursor-default items-center justify-between gap-4 rounded-[var(--radius-md)] px-5 py-4",
+              "launch-success-toast",
               isExitingLive && "launch-success-toast--exit",
             )}
+            minH="launchButtonH"
+            w="full"
+            maxW="launchToastMax"
+            cursor="default"
+            align="center"
+            justify="space-between"
+            gap="4"
+            borderRadius="md"
+            px="5"
+            py="4"
             style={{ backgroundColor: "var(--launch-success-toast-bg)" }}
             role="status"
             aria-live="polite"
           >
-            <p className="launch-success-toast__message text-wrap-balance text-base font-semibold leading-snug text-white">
+            <Text
+              className="launch-success-toast__message"
+              textWrap="balance"
+              fontSize="base"
+              fontWeight="semibold"
+              lineHeight="snug"
+              color="white"
+            >
               {LIVE_TOAST_MESSAGE}
-            </p>
+            </Text>
             <button
               type="button"
               onClick={onGoToEventPage}
               className={cn(
-                primaryEventActionVariantClass.go_to_event,
+                "flex h-[38px] shrink-0 items-center justify-center gap-1 rounded-[var(--radius-md)] border border-[var(--color-3)] bg-[var(--color-1)] px-3 text-sm font-semibold text-[var(--color-14)] shadow-[var(--shadow-sm)]",
                 "launch-success-toast__action cursor-pointer pl-3 pr-2.5 active:scale-[0.96] motion-safe:transition-transform motion-safe:duration-150 motion-safe:ease-out",
               )}
               aria-label="Go to Event"
@@ -145,10 +165,10 @@ export function LaunchEventBar({
                 aria-hidden
               />
             </button>
-          </div>
+          </Flex>
         )}
         {showFooterButton && displayVariant && (
-          <button
+          <chakra.button
             type="button"
             onClick={displayVariant === "launch" ? onLaunch : undefined}
             disabled={displayVariant !== "launch"}
@@ -161,84 +181,130 @@ export function LaunchEventBar({
                   ? "Pending approval"
                   : "Launch event"
             }
+            // Semantic animation classes own the spring (width, border-radius,
+            // padding, gap) — do NOT set those via Chakra props or the spring breaks.
             className={cn(
-              launchFooterButtonBaseClass,
+              "launch-footer-button",
               isPillShape
                 ? "launch-footer-button--loading"
                 : "launch-footer-button--wide",
-              displayVariant === "launch"
-                ? "cursor-pointer active:scale-[0.96] motion-safe:transition-[width,border-radius,box-shadow,opacity,transform] motion-safe:active:duration-150"
-                : "cursor-not-allowed",
               displayVariant === "launch" && "launch-footer-button--enter",
-              isButtonExitAnimating && "launch-footer-button--exit absolute",
-              showLiveToast && "z-10",
+              isButtonExitAnimating && "launch-footer-button--exit",
             )}
+            position={isButtonExitAnimating ? "absolute" : "relative"}
+            zIndex={showLiveToast ? "10" : undefined}
+            display="flex"
+            h="launchButtonH"
+            flexShrink={0}
+            alignItems="center"
+            justifyContent="center"
+            fontSize="base"
+            fontWeight="semibold"
+            lineHeight="1"
+            cursor={displayVariant === "launch" ? "pointer" : "not-allowed"}
+            transitionProperty={
+              displayVariant === "launch"
+                ? "width, border-radius, box-shadow, opacity, transform"
+                : undefined
+            }
+            _active={
+              displayVariant === "launch" ? { transform: "scale(0.96)" } : undefined
+            }
           >
-            <div
+            <Box
               aria-hidden
-              className={cn(
-                launchFooterGradientLayerClass,
-                isGradientState ? "opacity-100" : "opacity-0",
-              )}
+              className="launch-footer-button__layer"
+              pointerEvents="none"
+              position="absolute"
+              inset="0"
+              boxShadow="launchFooterGradient"
+              opacity={isGradientState ? 1 : 0}
               style={{
                 background: "var(--launch-event-gradient)",
                 borderRadius: "inherit",
               }}
             />
-            <div
+            <Box
               aria-hidden
-              className={cn(
-                launchFooterPendingLayerClass,
-                displayVariant === "pending" ? "opacity-100" : "opacity-0",
-              )}
+              className="launch-footer-button__layer"
+              pointerEvents="none"
+              position="absolute"
+              inset="0"
+              borderWidth="1px"
+              borderColor="color.3"
+              bg="color.1"
+              boxShadow="sm"
+              opacity={displayVariant === "pending" ? 1 : 0}
               style={{ borderRadius: "inherit" }}
             />
 
-            <div className="relative z-10 h-full w-full">
-              <span
+            <Box position="relative" zIndex="10" h="full" w="full">
+              <Flex
                 className={cn(
-                  "launch-footer-button__label absolute inset-0 flex items-center justify-center gap-3 text-white",
+                  "launch-footer-button__label",
                   displayVariant === "launch"
                     ? "launch-footer-button__label--visible"
                     : "launch-footer-button__label--hidden",
                 )}
+                position="absolute"
+                inset="0"
+                align="center"
+                justify="center"
+                gap="3"
+                color="white"
               >
-                <span className="launch-footer-button__launch-text">Launch Event</span>
+                <Text as="span" className="launch-footer-button__launch-text">
+                  Launch Event
+                </Text>
                 <Rocket
-                  className="launch-footer-button__launch-icon h-6 w-6 shrink-0"
+                  className="launch-footer-button__launch-icon"
+                  size={24}
+                  style={{ flexShrink: 0 }}
                   aria-hidden
                 />
-              </span>
+              </Flex>
 
-              <span
+              <Flex
                 className={cn(
-                  "launch-footer-button__label absolute inset-0 flex items-center justify-center",
+                  "launch-footer-button__label",
                   displayVariant === "loading"
                     ? "launch-footer-button__label--visible"
                     : "launch-footer-button__label--hidden",
                 )}
+                position="absolute"
+                inset="0"
+                align="center"
+                justify="center"
               >
                 <Loader2
-                  className="h-6 w-6 shrink-0 animate-spin text-white"
+                  className="animate-spin"
+                  size={24}
+                  style={{ flexShrink: 0, color: "white" }}
                   aria-hidden
                 />
-              </span>
+              </Flex>
 
-              <span
+              <Flex
                 className={cn(
-                  "launch-footer-button__label absolute inset-0 flex items-center justify-center gap-3 text-[var(--color-14)]",
+                  "launch-footer-button__label",
                   displayVariant === "pending"
                     ? "launch-footer-button__label--visible"
                     : "launch-footer-button__label--hidden",
                 )}
+                position="absolute"
+                inset="0"
+                align="center"
+                justify="center"
+                gap="3"
+                color="color.14"
               >
-                <span>Pending approval</span>
-                <Hourglass className="h-6 w-6 shrink-0" aria-hidden />
-              </span>
-            </div>
-          </button>
+                <Text as="span">Pending approval</Text>
+                <Hourglass size={24} style={{ flexShrink: 0 }} aria-hidden />
+              </Flex>
+            </Box>
+          </chakra.button>
         )}
-      </div>
-    </div>
+      </Flex>
+    </Flex>
   )
 }

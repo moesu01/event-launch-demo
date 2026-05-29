@@ -1,4 +1,4 @@
-import { cn } from "../../lib/cn"
+import { Box, Button, Flex, Heading, Text } from "@chakra-ui/react"
 
 interface DescriptionSectionProps {
   description: string
@@ -10,28 +10,38 @@ export function DescriptionSection({
   actionsDisabled,
 }: DescriptionSectionProps) {
   return (
-    <section className="mt-8 pb-8" aria-label="Description">
-      <div className="mb-4 flex items-center justify-between">
-        <h2 className="section-heading">Description</h2>
-        <span className="text-xs font-medium text-[var(--chakra-gray-500)]">
+    <Box as="section" mt="8" pb="8" aria-label="Description">
+      <Flex mb="4" align="center" justify="space-between">
+        <Heading as="h2" className="section-heading">
+          Description
+        </Heading>
+        <Text fontSize="xs" fontWeight="medium" color="gray.chakra500">
           Scheduled Update
-        </span>
-      </div>
-      <div className="rounded-[var(--radius-md)] border border-[var(--color-13)] p-4">
-        <p className="mb-4 whitespace-pre-line text-sm leading-relaxed text-[var(--color-16)]">
+        </Text>
+      </Flex>
+      <Box borderRadius="md" borderWidth="1px" borderColor="color.13" p="4">
+        <Text
+          mb="4"
+          whiteSpace="pre-line"
+          fontSize="sm"
+          lineHeight="relaxed"
+          color="color.16"
+        >
           {description}
-        </p>
-        <button
+        </Text>
+        <Button
           type="button"
+          unstyled
           disabled={actionsDisabled}
-          className={cn(
-            "text-sm font-semibold text-[var(--color-10)]",
-            actionsDisabled && "cursor-not-allowed opacity-40",
-          )}
+          fontSize="sm"
+          fontWeight="semibold"
+          color="color.10"
+          cursor={actionsDisabled ? "not-allowed" : "pointer"}
+          opacity={actionsDisabled ? 0.4 : 1}
         >
           Edit Description
-        </button>
-      </div>
-    </section>
+        </Button>
+      </Box>
+    </Box>
   )
 }

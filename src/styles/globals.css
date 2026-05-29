@@ -113,9 +113,14 @@
     #ffffff;
 }
 
-* {
-  box-sizing: border-box;
+.sidebar-nav-item:hover .sidebar-nav-icon {
+  opacity: 1;
 }
+
+.sidebar-nav-item:hover .sidebar-label-transition:not([aria-hidden="true"]) {
+  opacity: 1;
+}
+
 
 body {
   margin: 0;

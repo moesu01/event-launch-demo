@@ -1,3 +1,4 @@
+import { Box, Flex, Heading, Text } from "@chakra-ui/react"
 import type { ReactNode } from "react"
 import type { EventMetrics } from "../../types/event"
 import { PerformanceMetricCard } from "./performance-metric-card"
@@ -21,35 +22,61 @@ function MetricsRow({
 }) {
   if (variant === "payouts") {
     return (
-      <div className="flex items-start justify-between gap-3 border-t border-[var(--color-13)] p-[var(--spacing-md)]">
-        <h2 className="shrink-0 pt-1 text-base font-semibold leading-none text-[var(--color-14)]">
+      <Flex
+        align="flex-start"
+        justify="space-between"
+        gap="3"
+        borderTopWidth="1px"
+        borderColor="color.13"
+        p="md"
+      >
+        <Heading
+          as="h2"
+          flexShrink={0}
+          pt="1"
+          fontSize="base"
+          fontWeight="semibold"
+          lineHeight="1"
+          color="color.14"
+        >
           {title}
-        </h2>
-        <div className="flex min-w-0 max-w-[800px] flex-1 items-start gap-3">
+        </Heading>
+        <Flex minW="0" maxW="statsContentMax" flex="1" align="flex-start" gap="3">
           {children}
-        </div>
-      </div>
+        </Flex>
+      </Flex>
     )
   }
 
   return (
-    <div className="flex border-t border-[var(--color-13)] px-[var(--spacing-md)] py-4">
-      <div className="w-[140px] shrink-0 pt-1">
-        <h2 className="text-base font-semibold text-[var(--color-14)]">{title}</h2>
+    <Flex borderTopWidth="1px" borderColor="color.13" px="md" py="4">
+      <Box w="statsLabelWidth" flexShrink={0} pt="1">
+        <Heading as="h2" fontSize="base" fontWeight="semibold" color="color.14">
+          {title}
+        </Heading>
         {subtitle && (
-          <p className="mt-0.5 text-xs text-[var(--color-18)]">{subtitle}</p>
+          <Text mt="0.5" fontSize="xs" color="color.18">
+            {subtitle}
+          </Text>
         )}
-      </div>
-      <div className="flex min-w-0 flex-1 flex-wrap items-center justify-end gap-3">
+      </Box>
+      <Flex
+        minW="0"
+        flex="1"
+        flexWrap="wrap"
+        align="center"
+        justify="flex-end"
+        gap="3"
+      >
         {children}
-      </div>
-    </div>
+      </Flex>
+    </Flex>
   )
 }
 
 export function OverviewStatsGrid({ metrics }: OverviewStatsGridProps) {
   return (
-    <section className="overflow-hidden rounded-[var(--radius-10)]" aria-label="Overview statistics">
+    <Box as="section" overflow="hidden" borderRadius="r10" aria-label="Overview statistics">
       <MetricsRow title="Ticket Metrics">
         <PerformanceMetricCard label="Sales" value={metrics.sales} />
         <PerformanceMetricCard label="Total Tickets" value={metrics.totalTickets} />
@@ -71,12 +98,6 @@ export function OverviewStatsGrid({ metrics }: OverviewStatsGridProps) {
           size="flex"
         />
       </MetricsRow>
-
-      {/* <MetricsRow title="Attendance" subtitle="People who checked in">
-        <PerformanceMetricCard label="Total" value={metrics.attendanceTotal} />
-        <PerformanceMetricCard label="Ticket Buyers" value={metrics.ticketBuyers} />
-        <PerformanceMetricCard label="Guestlist" value={metrics.guestlist} />
-      </MetricsRow> */}
-    </section>
+    </Box>
   )
 }

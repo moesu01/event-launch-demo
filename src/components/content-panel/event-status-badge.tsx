@@ -1,5 +1,5 @@
+import { Box, Button, Flex, Text } from "@chakra-ui/react"
 import type { StatusBadgeConfig } from "../../types/event"
-import { cn } from "../../lib/cn"
 
 interface EventStatusBadgeProps {
   badge: StatusBadgeConfig
@@ -13,54 +13,80 @@ export function EventStatusBadge({
   isExpanded = true,
 }: EventStatusBadgeProps) {
   return (
-    <button
+    <Button
       type="button"
       onClick={onClick}
-      className={cn(
-        "sidebar-status-badge flex cursor-pointer flex-col overflow-hidden border text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-10)] active:scale-[0.96] motion-safe:transition-[transform] active:duration-150",
-        isExpanded
-          ? "w-[131px] gap-[var(--spacing-6)] rounded-[var(--radius-md)] border-[var(--color-3)] bg-[var(--color-1)] p-[var(--spacing-md)] shadow-[var(--shadow-elevation-3)] hover:bg-[var(--color-8)]"
-          : "w-8 gap-0 rounded-[var(--radius-sm)] border-transparent bg-transparent p-1 shadow-none hover:opacity-80",
-      )}
+      className="sidebar-status-badge"
+      unstyled
+      display="flex"
+      cursor="pointer"
+      flexDirection="column"
+      overflow="hidden"
+      borderWidth="1px"
+      borderStyle="solid"
+      textAlign="left"
+      w={isExpanded ? "statusBadgeExpanded" : "8"}
+      gap={isExpanded ? "sp6" : "0"}
+      borderRadius={isExpanded ? "md" : "sm"}
+      borderColor={isExpanded ? "color.3" : "transparent"}
+      bg={isExpanded ? "color.1" : "transparent"}
+      p={isExpanded ? "md" : "1"}
+      boxShadow={isExpanded ? "elevation.3" : "none"}
+      _hover={{ bg: isExpanded ? "color.8" : undefined, opacity: isExpanded ? 1 : 0.8 }}
+      _focusVisible={{
+        outline: "2px solid",
+        outlineColor: "color.10",
+        outlineOffset: "2px",
+      }}
+      _active={{ transform: "scale(0.96)" }}
+      transition="transform 150ms"
       aria-label={`Event status: ${badge.label}. Click to cycle prototype status.`}
     >
-      <div
-        className={cn(
-          "sidebar-reveal-grid w-full",
-          isExpanded && "sidebar-reveal-grid--open",
-        )}
+      <Box
+        className={isExpanded ? "sidebar-reveal-grid sidebar-reveal-grid--open" : "sidebar-reveal-grid"}
+        w="full"
       >
-        <div className="sidebar-reveal-grid__inner">
-          <span className="text-[11px] font-medium tracking-[0.05em] text-[var(--chakra-gray-500)] uppercase">
+        <Box className="sidebar-reveal-grid__inner">
+          <Text textStyle="captionMedium" color="gray.chakra500">
             Status
-          </span>
-        </div>
-      </div>
+          </Text>
+        </Box>
+      </Box>
 
-      <div
-        className={cn(
-          "sidebar-status-dot-row relative flex w-full min-w-0 items-center",
-          isExpanded ? "gap-[var(--spacing-xs)] pl-0" : "gap-0 pl-2",
-        )}
+      <Flex
+        className="sidebar-status-dot-row"
+        position="relative"
+        w="full"
+        minW="0"
+        align="center"
+        gap={isExpanded ? "xs" : "0"}
+        pl={isExpanded ? "0" : "2"}
       >
-        <span
-          className="h-2 w-2 shrink-0 rounded-full transition-[background-color] duration-500 ease-out"
+        <Box
+          h="2"
+          w="2"
+          flexShrink={0}
+          borderRadius="full"
+          transition="background-color 500ms ease-out"
           style={{ backgroundColor: badge.dotColor }}
           aria-hidden
         />
-        <span
-          className={cn(
-            "sidebar-label-transition overflow-hidden text-[13px] font-semibold leading-none whitespace-nowrap",
-            isExpanded
-              ? "translate-x-0 opacity-100"
-              : "pointer-events-none absolute w-0 -translate-x-1 opacity-0",
-          )}
+        <Text
+          className="sidebar-label-transition"
+          overflow="hidden"
+          textStyle="bodySmSemibold"
+          whiteSpace="nowrap"
+          position={isExpanded ? undefined : "absolute"}
+          w={isExpanded ? undefined : "0"}
+          transform={isExpanded ? "translateX(0)" : "translateX(-4px)"}
+          opacity={isExpanded ? 1 : 0}
+          pointerEvents={isExpanded ? undefined : "none"}
           style={{ color: badge.textColor }}
           aria-hidden={!isExpanded}
         >
           {badge.label}
-        </span>
-      </div>
-    </button>
+        </Text>
+      </Flex>
+    </Button>
   )
 }

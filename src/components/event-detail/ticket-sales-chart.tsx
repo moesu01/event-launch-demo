@@ -1,3 +1,4 @@
+import { Box, Flex, Heading } from "@chakra-ui/react"
 import {
   Bar,
   BarChart,
@@ -14,12 +15,17 @@ interface TicketSalesChartProps {
 
 export function TicketSalesChart({ data }: TicketSalesChartProps) {
   return (
-    <section
-      className="mt-6 flex flex-col gap-6"
+    <Flex
+      as="section"
+      mt="6"
+      direction="column"
+      gap="6"
       aria-label="Ticket sales chart"
     >
-      <h2 className="section-heading">Ticket Sales</h2>
-      <div className="h-[280px] w-full">
+      <Heading as="h2" className="section-heading">
+        Ticket Sales
+      </Heading>
+      <Box h="chartHeight" w="full">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="var(--color-13)" vertical={false} />
@@ -44,7 +50,7 @@ export function TicketSalesChart({ data }: TicketSalesChartProps) {
             />
           </BarChart>
         </ResponsiveContainer>
-      </div>
-    </section>
+      </Box>
+    </Flex>
   )
 }
